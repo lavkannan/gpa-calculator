@@ -6,7 +6,7 @@
   "version": "1.0",
 
   "browser_action": {
-    "default_icon": "calc_icon.png",
+    
     "default_popup": "calc.html",
     "default_title": "Calculate your GPA!"
   },

@@ -1,23 +1,41 @@
 <!doctype html>
 
 <html>
-  <title>GPA Calculator Popup</title>
-  <style>
-  table, th, td {
-      border: 1px solid black;
-      border-collapse: collapse;
-      padding: 15px;
-  }
-  th, td {
-      padding: 5px;
-      text-align: left;
-  }
-  </style>
-    
+  <head>
+    <title>GPA Calculator Popup</title>
+    <style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 15px;
+    }
+    th, td {
+        padding: 5px;
+        text-align: left;
+    }
+/*
+    table {
+        counter-reset: rowNumber;
+    }
+
+    table tr {
+        counter-increment: rowNumber;
+    }
+
+    table tr td:first-child::before {
+        content: counter(rowNumber);
+        min-width: 1em;
+        margin-right: 0.5em;
+    }*/
+    </style>
+
+  </head>
+
   <body>
-    <form>
-      <table style="width:100%">
-      <caption>Grades</caption>
+
+    <form id="gradesForm" action="" method="get">
+      <table style="width:100%" id="table">
+      <caption><b>Grades</b></caption>
       <tr>
         <th>Couse</th>
         <th>Description</th>
@@ -25,42 +43,39 @@
         <th>Units</th>
       </tr>
       <tr>
-        <td><input type="text" name="id1"></td>
-        <td><input type="text" name="desc1"></td>
-        <td><input type="text" name="grade1"></td>
-        <td><input type="text" name="unit1"></td>
+        <td><input type="text" id="id1"></td>
+        <td><input type="text" id="desc1"></td>
+        <td><input type="text" id="grade1" class="grade" value="A"></td>
+        <td><input type="text" id="unit1" class="units" value="3"></td>
+        <!-- <td><input type="button" id="del1" value="X"></td> -->
       </tr>
       <tr>
-        <td><input type="text" name="id2"></td>
-        <td><input type="text" name="desc2"></td>
-        <td><input type="text" name="grade2"></td>
-        <td><input type="text" name="unit2"></td>
+        <td><input type="text" id="id2"></td>
+        <td><input type="text" id="desc2"></td>
+        <td><input type="text" id="grade2" class="grade" value="A"></td>
+        <td><input type="text" id="unit2" class="units" value="3"></td>
       </tr>
       <tr>
-        <td><input type="text" name="id3"></td>
-        <td><input type="text" name="desc3"></td>
-        <td><input type="text" name="grade3"></td>
-        <td><input type="text" name="unit3"></td>
+        <td><input type="text" id="id3"></td>
+        <td><input type="text" id="desc3"></td>
+        <td><input type="text" id="grade3" class="grade" value="A"></td>
+        <td><input type="text" id="unit3" class="units" value="3"></td>
       </tr>
       <tr>
-        <td><input type="text" name="id4"></td>
-        <td><input type="text" name="desc4"></td>
-        <td><input type="text" name="grade4"></td>
-        <td><input type="text" name="unit4"></td>
-      </tr>
-      <tr>
-        <td><input type="text" name="id5"></td>
-        <td><input type="text" name="desc5"></td>
-        <td><input type="text" name="grade5"></td>
-        <td><input type="text" name="unit5"></td>
+        <td><input type="text" id="id4"></td>
+        <td><input type="text" id="desc4"></td>
+        <td><input type="text" id="grade4" class="grade" value="A"></td>
+        <td><input type="text" id="unit4" class="units" value="3"></td>
       </tr>
       </table>
-      <input type="submit" value="Submit">
     </form>
+    <button id="submit">Calculate GPA!</button>
+    <button id="addRow">Add another row!</button>
 
-    <!-- <div id="status"></div>
-    <img id="image-result" hidden> -->
+    <div id="result"></div>
 
+    <script src="calc.js"></script>
+    
   </body>
 </html>
 
