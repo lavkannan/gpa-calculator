@@ -67,12 +67,14 @@ function storeGrades() {
 function fillTableVals() {
 
     var numCols = 4;
-    var valString = localStorage["tableValues"];
-    if (valString === null) {
-        valString = Array(16).fill("");
-    }
 
-    var dataArray = JSON.parse(valString);
+    var valString = localStorage["tableValues"];
+    var dataArray;
+    if (valString == null) {
+        dataArray = Array(16).fill("");
+    } else {
+        dataArray = JSON.parse(valString);
+    }
     console.log(dataArray);
 
     var $html = "";
