@@ -1,14 +1,29 @@
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('submit').addEventListener('click', function() {
-        calcGPA();
-    });
-    var link = document.getElementById('addRow');
-    link.addEventListener('click', function() {
-    	// var id = link.id;
-        addRow();
-    });
+// document.addEventListener('DOMContentLoaded', function() {
+//     document.getElementById('submit').addEventListener('click', function() {
+//         // calcGPA();
+//         // storeGrades();
+//         // var x = chrome.storage.sync.get("value", function() {});
+//         // localStorage["value"] = "A";
+//         var x = localStorage["value"];
+//         document.getElementById("result").textContent = x;
+
+//     });
+//     var link = document.getElementById('addRow');
+//     link.addEventListener('click', function() {
+//     	// var id = link.id;
+//         addRow();
+//     });
+// });
+
+$(document).ready( function() {
+
+    $("#submit").click(calcGPA);
 });
+
+function storeGrades() {
+
+}
 
 function addRow() {
 	var table = document.getElementById("table");
@@ -43,8 +58,11 @@ function calcGPA() {
 
  	var val = document.getElementById("id1").value;
  	stuff += val;
-    var gradeList = document.getElementsByClassName("grade")
-    var creditList = document.getElementsByClassName("units")
+    // var gradeList = document.getElementsByClassName("grade")
+    // var creditList = document.getElementsByClassName("units")
+    var gradeList = $(".grade");
+    var creditList = $(".units");
+
     // if(gradeList.length != creditList.length) {
     // 	alert("Please fill in all the grades and units.")
     // }
@@ -101,5 +119,7 @@ function calcGPA() {
     	credits += gp;
     };
     console.log("total credits: " + credits + "   total grade point: " + gradePoint);
-    document.getElementById("result").textContent = (gradePoint/credits).toFixed(3);
+    // document.getElementById("result").textContent = (gradePoint/credits).toFixed(3);
+    var gpa = (gradePoint/credits).toFixed(3)
+    $("#result").html(gpa);
 }

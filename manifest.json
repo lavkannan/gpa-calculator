@@ -10,7 +10,9 @@
     "default_popup": "calc.html",
     "default_title": "Calculate your GPA!"
   },
+
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "storage"
   ]
 }
