@@ -1,5 +1,7 @@
 
 var numTables = 0;
+var tableStyle = { "border": "2px solid black", "border-collapse": "collapse", "padding": "15px" };
+var rowStyle = { "border": "1px solid black", "border-collapse": "collapse", "padding": "5px", "text-align": "left"};
 
 $(document).ready( function() {
 
@@ -11,8 +13,9 @@ $(document).ready( function() {
         storeGrades();
     });
 
-    $("#addRow").click( function() {
-        addRows(Array(4).fill(""));
+    $(".addRow").click( function() {
+        var id = $(this).attr("id");
+        addRows(Array(4).fill(""), $("table#"+id), rowStyle, id);
     })
 
     $("#addTable").click( function() {
@@ -27,18 +30,18 @@ function storeGrades() {
     var inputArray = [];
     $("input").each(function() {
         var id = $(this).attr("id");
-        console.log(id);
-        console.log(this);
+        // console.log(id);
+        // console.log(this);
         if(inputArray.length <= id) {
             inputArray[id] = [];
         }
-        console.log(inputArray.length)
+        // console.log(inputArray.length)
         inputArray[id].push($(this).val())
     });
 
     localStorage["tableValues"] = JSON.stringify(inputArray);
     console.log(inputArray);
-    console.log(JSON.stringify(inputArray));
+    // console.log(JSON.stringify(inputArray));
     
 }
 
@@ -51,10 +54,9 @@ function fillTableVals() {
         // dataArray[1] = Array(16).fill("");
 
     } else {
-        console.log("valString: " + valString);
+        // console.log("valString: " + valString);
         dataArray = JSON.parse(valString);
     }
-    console.log(dataArray);
 
     addTables(dataArray)
 }
@@ -66,7 +68,7 @@ function addTables(dataArray) {
 
     for (var i = 0; i < dataArray.length; i++) {
         var table = $("<table style='width:100%'></table>").attr("id", numTables + i);
-        console.log("setting id: " + table.attr("id"));
+        // console.log("setting id: " + table.attr("id"));
         table.append("<caption><b> Semester " + (numTables+i+1) + "</b></caption>");
         var headingStyle = {"background-color": "#d9d9d9"};
         var headingRow = $("<tr></tr>");
@@ -75,16 +77,12 @@ function addTables(dataArray) {
         headingRow.append("<th>Grade</th>").css(headingStyle);
         headingRow.append("<th>Units</th>").css(headingStyle);
         table.append(headingRow).addClass("semesterTable");
-
-        var tableStyle = { "border": "2px solid black", "border-collapse": "collapse", "padding": "15px" };
-        var rowStyle = { "border-collapse": "collapse", "padding": "5px", "text-align": "left"};
-
         table.css(tableStyle);
 
         addRows(dataArray[i], table, rowStyle, table.attr("id"))
 
         $("#enterGrades").append(table);
-        // $("#enterGrades").append("<button id='" + table.attr("id") + "' class='addRow'>Add another row!</button>");
+        $("#enterGrades").append("<button id='" + table.attr("id") + "' class='addRow'>Add new row!</button>");
     };
     numTables += dataArray.length;
 }
@@ -92,7 +90,7 @@ function addTables(dataArray) {
 function addRows(dataArray, table, style, id) {
 
     var numCols = 4;
-    var $html = "";
+    // var $html = "";
     var count = 0;
 
     for (var i = 0; i < dataArray.length / numCols; i++) {
@@ -113,7 +111,7 @@ function addRows(dataArray, table, style, id) {
         }
         table.append(row);
     }
-    table.append($html);
+    // table.append($html);
 }
 
 function calcGPA() {
