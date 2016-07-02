@@ -84,7 +84,7 @@ function addTables(dataArray) {
         addRows(dataArray[i], table, rowStyle, table.attr("id"))
 
         $("#enterGrades").append(table);
-        // $("#enterGrades").append("<button id='addRow'>Add another row!</button>");
+        // $("#enterGrades").append("<button id='" + table.attr("id") + "' class='addRow'>Add another row!</button>");
     };
     numTables += dataArray.length;
 }
