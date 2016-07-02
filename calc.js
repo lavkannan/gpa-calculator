@@ -1,40 +1,10 @@
 
-// document.addEventListener('DOMContentLoaded', function() {
-//     document.getElementById('submit').addEventListener('click', function() {
-//         // calcGPA();
-//         // storeGrades();
-//         // var x = chrome.storage.sync.get("value", function() {});
-//         // localStorage["value"] = "A";
-//         var x = localStorage["value"];
-//         document.getElementById("result").textContent = x;
-
-//     });
-//     var link = document.getElementById('addRow');
-//     link.addEventListener('click', function() {
-//     	// var id = link.id;
-//         addRow();
-//     });
-// });
+var numTables = 0;
 
 $(document).ready( function() {
 
     fillTableVals();
-
-    // chrome.storeGrades.sync.clear();
-
-    // chrome.storage.sync.set({"key": "value"}, function() {
-    //     console.log("Saved", key, value);
-    // });
-    // localStorage["key"] = "value";
-
-    // var value;
-    // chrome.storage.sync.get("key", function (obj) {
-    //     console.log("key", obj);
-    //     value = obj;
-    // });
-    // var value = localStorage["key"];
-
-    // $("#id1").val(value);
+    // localStorage.clear();
 
     $("#submit").click( function() {
         calcGPA();
@@ -42,78 +12,115 @@ $(document).ready( function() {
     });
 
     $("#addRow").click( function() {
-        
+        addRows(Array(4).fill(""));
+    })
+
+    $("#addTable").click( function() {
+        var dataArray = [];
+        dataArray[0] = Array(16).fill("");
+        addTables(dataArray);
     })
 });
 
 function storeGrades() {
 
-    var $inputArray = new Array();
+    var inputArray = [];
     $("input").each(function() {
-        $inputArray.push($(this).val())
+        var id = $(this).attr("id");
+        console.log(id);
+        console.log(this);
+        if(inputArray.length <= id) {
+            inputArray[id] = [];
+        }
+        console.log(inputArray.length)
+        inputArray[id].push($(this).val())
     });
 
-    // console.log(inputs);
-
-    // chrome.storage.sync.set({"tableValues": JSON.stringify($inputArray)}, function() {
-    //     console.log("Saved", key, value);
-    // });
-    localStorage["tableValues"] = JSON.stringify($inputArray);
-    console.log($inputArray);
-    console.log(JSON.stringify($inputArray));
+    localStorage["tableValues"] = JSON.stringify(inputArray);
+    console.log(inputArray);
+    console.log(JSON.stringify(inputArray));
     
 }
 
 function fillTableVals() {
 
-    var numCols = 4;
-
     var valString = localStorage["tableValues"];
-    var dataArray;
+    var dataArray = [];
     if (valString == null) {
-        dataArray = Array(16).fill("");
+        dataArray[0] = Array(16).fill("");
+        // dataArray[1] = Array(16).fill("");
+
     } else {
+        console.log("valString: " + valString);
         dataArray = JSON.parse(valString);
     }
     console.log(dataArray);
 
+    addTables(dataArray)
+}
+
+//dataArray is 2d array
+function addTables(dataArray) {
+
+    console.log(dataArray.length);
+
+    for (var i = 0; i < dataArray.length; i++) {
+        var table = $("<table style='width:100%'></table>").attr("id", numTables + i);
+        console.log("setting id: " + table.attr("id"));
+        table.append("<caption><b> Semester " + (numTables+i+1) + "</b></caption>");
+        var headingStyle = {"background-color": "#d9d9d9"};
+        var headingRow = $("<tr></tr>");
+        headingRow.append("<th>Couse</th>").css(headingStyle);
+        headingRow.append("<th>Description</th>").css(headingStyle);
+        headingRow.append("<th>Grade</th>").css(headingStyle);
+        headingRow.append("<th>Units</th>").css(headingStyle);
+        table.append(headingRow).addClass("semesterTable");
+
+        var tableStyle = { "border": "2px solid black", "border-collapse": "collapse", "padding": "15px" };
+        var rowStyle = { "border-collapse": "collapse", "padding": "5px", "text-align": "left"};
+
+        table.css(tableStyle);
+
+        addRows(dataArray[i], table, rowStyle, table.attr("id"))
+
+        $("#enterGrades").append(table);
+        // $("#enterGrades").append("<button id='addRow'>Add another row!</button>");
+    };
+    numTables += dataArray.length;
+}
+
+function addRows(dataArray, table, style, id) {
+
+    var numCols = 4;
     var $html = "";
     var count = 0;
+
     for (var i = 0; i < dataArray.length / numCols; i++) {
-        $html += "<tr>";
+
+        var row = $("<tr></tr>");
         for (var j = 0; j < numCols; j++) {
+
             var className = "";
             if (j == 2) className = "grade";
             else if (j == 3) className = "units";
 
-            $html += "<td><input type='text' class='" + className + "' value='"+ dataArray[count] + "'></td>";
+            var elem = $("<input type='text'>").attr("id",id).addClass(className).val(dataArray[count]);
+            var col = $("<td></td>").append(elem);
+            row.append(col);
+            col.css(style);
+
             count++;
         }
-        $html += "</tr>";
+        table.append(row);
     }
-
-    $("table").append($html);
+    table.append($html);
 }
-
-// document.getElementById("submit").onClick = "calcGPA()"
 
 function calcGPA() {
     console.log("in calcGPA")
-    // var form = document.getElementById("gradesForm")
- //    var val = form.elements["id1"].value;
-    // var stuff = "";
 
-    // var val = document.getElementById("id1").value;
-    // stuff += val;
-    // var gradeList = document.getElementsByClassName("grade")
-    // var creditList = document.getElementsByClassName("units")
     var gradeList = $(".grade");
     var creditList = $(".units");
-
-    // if(gradeList.length != creditList.length) {
-    //  alert("Please fill in all the grades and units.")
-    // }
-    
     var gradePoint = 0;
     var credits = 0;
     for (var i = 0; i < gradeList.length; i++) {
@@ -160,36 +167,23 @@ function calcGPA() {
             default:
                 x = 0;
         }
-        // console.log ("creditlist[i].value: " + creditList[i].value);
         var gp = (creditList[i].value == "") ? 0 : parseInt(creditList[i].value);
         gradePoint += (x * gp);
         credits += gp;
     };
     console.log("total credits: " + credits + "   total grade point: " + gradePoint);
-    // document.getElementById("result").textContent = (gradePoint/credits).toFixed(3);
     var gpa = (gradePoint/credits).toFixed(3)
     $("#result").html(gpa);
 }
 
-function addRow() {
-	var table = document.getElementById("table");
-	var row = table.insertRow(table.length);
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    var cell3 = row.insertCell(2);
-    var cell4 = row.insertCell(3);
-    var element1 = document.createElement('input');
-    element1.type="text";
-    var element2 = document.createElement('input');
-    element2.type="text";
-    var element3 = document.createElement('input');
-    element3.type="text";
-    element3.className="grade"
-    var element4 = document.createElement('input');
-    element4.type="text";
-    element4.className="units"
-    cell1.appendChild(element1);
-    cell2.appendChild(element2);
-    cell3.appendChild(element3);
-    cell4.appendChild(element4);
-}
+/*
+Next step: Add new tables for diff semesters
+- separate gpa for each sem, and cumulative at the end
+- each table should have add new row (and remove row)
+- label each table (by semester)
+- data should be stored as array of arrays (big one for diff semesters, small arr for actual grades)
+*/
+
+
+
+

@@ -6,75 +6,19 @@
     <script type="text/javascript" src="jquery-3.0.0.min.js"></script>
 
     <title>GPA Calculator Popup</title>
-    <style>
-    table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
-        padding: 15px;
-    }
-    th, td {
-        padding: 5px;
-        text-align: left;
-    }
-/*
-    table {
-        counter-reset: rowNumber;
-    }
-
-    table tr {
-        counter-increment: rowNumber;
-    }
-
-    table tr td:first-child::before {
-        content: counter(rowNumber);
-        min-width: 1em;
-        margin-right: 0.5em;
-    }*/
-    </style>
-
+    <link rel="stylesheet" type="text/css" href="calc.css">
+    
   </head>
 
   <body>
 
-    <form id="gradesForm" action="" method="get">
-      <table style="width:100%" id="table1">
+    <div id="enterGrades">
       <caption><b>Grades</b></caption>
-      <tr>
-        <th>Couse</th>
-        <th>Description</th>
-        <th>Grade</th>
-        <th>Units</th>
-      </tr>
-      <!-- <tr>
-        <td><input type="text" id="id1"></td>
-        <td><input type="text" id="desc1"></td>
-        <td><input type="text" id="grade1" class="grade" value="A"></td>
-        <td><input type="text" id="unit1" class="units" value="3"></td>
-      </tr>
-      <tr>
-        <td><input type="text" id="id2"></td>
-        <td><input type="text" id="desc2"></td>
-        <td><input type="text" id="grade2" class="grade" value="A"></td>
-        <td><input type="text" id="unit2" class="units" value="3"></td>
-      </tr>
-      <tr>
-        <td><input type="text" id="id3"></td>
-        <td><input type="text" id="desc3"></td>
-        <td><input type="text" id="grade3" class="grade" value="A"></td>
-        <td><input type="text" id="unit3" class="units" value="3"></td>
-      </tr>
-      <tr>
-        <td><input type="text" id="id4"></td>
-        <td><input type="text" id="desc4"></td>
-        <td><input type="text" id="grade4" class="grade" value="A"></td>
-        <td><input type="text" id="unit4" class="units" value="3"></td>
-      </tr> -->
-      </table>
-    </form>
+    </div>
+    <button id="addTable">Add another table!</button>
     <button id="submit">Calculate GPA!</button>
-    <button id="addRow">Add another row!</button>
 
-    <div id="result"></div>
+    <p id="result"></p>
 
     <script src="calc.js"></script>
     
