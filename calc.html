@@ -5,19 +5,33 @@
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script> -->
     <script type="text/javascript" src="jquery-3.0.0.min.js"></script>
 
-    <title>GPA Calculator Popup</title>
+    <title>GPA Calculator</title>
+
+    <style>
+
+    /*body {
+      
+      margin: 20px 300px 20px 300px;
+
+    }*/
+
+    </style>
     
   </head>
 
   <body>
 
-    <div id="enterGrades">
-      <caption><b>Grades</b></caption>
+    <div id="enterGrades" align="center" width="50%">
+      <caption><h1><center>Grades</center></h1></caption>
     </div>
-    <button id="addTable">Add new table!</button>
-    <button id="submit">Calculate GPA!</button>
 
-    <p id="result"></p>
+    <div align="center">
+      <button id="addTable">Add new table</button>
+      <button id="removeTable">Remove last table</button>
+      <button id="submit">Calculate GPA!</button>
+
+      <p id="result"></p>
+    </div>
 
     <script src="calc.js"></script>
     

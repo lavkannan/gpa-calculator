@@ -7,7 +7,7 @@
 
   "browser_action": {
     
-    "default_popup": "calc.html",
+    "default_popup": "popup.html",
     "default_title": "Calculate your GPA!"
   },
 
