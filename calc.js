@@ -219,10 +219,9 @@ function calcGPA() {
 /*
 Next step: Add new tables for diff semesters
 - separate gpa for each sem, and cumulative at the end
-- each table should have add new row (and remove row)
-- label each table (by semester)
-- data should be stored as array of arrays (big one for diff semesters, small arr for actual grades)
-bugs
+- Web scraping
+
+Bugs:
 - cannot add/remove row to newly created table (must reload to add row)
 */
 
