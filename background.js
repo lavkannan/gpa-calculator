@@ -9,6 +9,14 @@ function getRowString(document_root) {
 
 	var elems = document_root.querySelectorAll(".PSEDITBOX_DISPONLY, .PSHYPERLINK");
 	// var elems = document_root.getElementById("CRSE_HIST$scroll$0").childNodes;
+
+	//not correct page
+	if(elems.length === 0) {
+		var dataArray = [];
+	    dataArray[0] = Array(16).fill("");
+		return JSON.stringify(dataArray);
+	}
+
 	var data = new Array(elems.length/2);
 	// var elems = $("document_root").find(".PSLEVEL1GRIDODDROW");
 

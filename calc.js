@@ -5,7 +5,26 @@ var rowStyle = { "border": "1px solid black", "border-collapse": "collapse", "pa
 
 $(document).ready( function() {
 
-    fillTableVals();
+    console.log("calcjs ready");
+
+    chrome.runtime.onMessage.addListener(function(request, sender) {
+      console.log("got a msg, action: " + request.action);
+      if (request.action === "getDataArray") {
+        
+        // localStorage["tableValues"] = request.source;
+        console.log("from popup.js:  " + (request.source));
+        $("#result").html(JSON.parse(request.source));
+        // addTables(JSON.parse(request.source));
+      }
+    });
+
+    chrome.runtime.sendMessage({
+        action: "getStuff",
+        source: "stuff"
+    });
+
+    // fillTableVals();
+    console.log("after adding listener");
     // localStorage.clear();
 
     $("#submit").click( function() {
@@ -27,7 +46,6 @@ $(document).ready( function() {
     $("#addTable").click( function() {
         addTables([Array(16).fill("")]);
         if(!$("#removeTable").is(":visible")) {
-            console.log("button is not visible");
             $("#removeTable").show();
             $("#submit").show();
         }
@@ -80,7 +98,7 @@ function fillTableVals() {
         dataArray = JSON.parse(valString);
     }
 
-    addTables(dataArray)
+    addTables(dataArray);
 }
 
 //dataArray is 2d array
