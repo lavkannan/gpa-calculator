@@ -31,9 +31,9 @@ $(document).ready( function() {
         
         if(response && response.source) {
             
-            $("#result").html(response.source);
-            localStorage["tableValues"] = response.source;
-            fillTableVals();
+            $("#result").html(sourceToDataArr(JSON.parse(response.source)));
+            // localStorage["tableValues"] = response.source;
+            // fillTableVals();
         }
     });
 
@@ -81,7 +81,26 @@ $(document).ready( function() {
 
 function sourceToDataArr(source) {
 
+    var terms = [];
+    for (var i = 2; i < source.length; i+=5) {
+     if(terms.indexOf(source[i]) === -1)
+         terms.push(source[i]);
+    }
+    terms.sort(compareTerms);
+    console.log("terms: " + terms);
 
+    var dataArray = new Array(terms.length).fill([]);
+    for (var i = 0; i < source.length; i+=5) {
+        var index = terms.indexOf(source[i+2]);
+        console.log("push " + source[i+2] + " at index " + index + "    " + dataArray[index]);
+        for (j in [0,1,3,4]) {
+            dataArray[index].push(source[i+j]);
+        }
+    }
+
+    console.log("dataArray:  " + dataArray);
+
+    return dataArray;
 }
 
 function compareTerms(first, second) {
@@ -89,8 +108,8 @@ function compareTerms(first, second) {
     if(first === second)
         return 0;
 
-    var firstYear = parseInt(first.substring(first.length()-3));
-    var secondYear = parseInt(second.substring(second.length()-3));
+    var firstYear = parseInt(first.substring(first.length-3));
+    var secondYear = parseInt(second.substring(second.length-3));
 
     if (firstYear < secondYear)
         return -1;

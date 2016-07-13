@@ -48,14 +48,9 @@ function waitForDataArr(){
         return JSON.stringify(dataArray);
     
     } else {
-        setTimeout(waitForDataArr(), 150);
+        setTimeout(waitForDataArr(), 250);
     }
 }
 
-
-function compareTerms(first, second) {
-
-	
-}
 
 
