@@ -1,7 +1,7 @@
 
 // Send message containing course history table information to popup page
 chrome.runtime.sendMessage({
-	action: "getSource",
+	action: "putGrades",
 	source: getRowString(document)
 });
 

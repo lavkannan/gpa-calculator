@@ -7,24 +7,37 @@ $(document).ready( function() {
 
     console.log("calcjs ready");
 
-    chrome.runtime.onMessage.addListener(function(request, sender) {
-      console.log("got a msg, action: " + request.action);
-      if (request.action === "getDataArray") {
+    // chrome.runtime.onMessage.addListener(function(request, sender) {
+    //   console.log("got a msg, action: " + request.action);
+    //   if (request.action === "getDataArray") {
         
-        // localStorage["tableValues"] = request.source;
-        console.log("from popup.js:  " + (request.source));
-        $("#result").html(JSON.parse(request.source));
-        // addTables(JSON.parse(request.source));
-      }
-    });
+    //     // localStorage["tableValues"] = request.source;
+    //     console.log("from popup.js:  " + (request.source));
+    //     $("#result").html(JSON.parse(request.source));
+    //     // addTables(JSON.parse(request.source));
+    //   }
+    // });
 
-    chrome.runtime.sendMessage({
-        action: "getStuff",
-        source: "stuff"
+    // chrome.runtime.sendMessage({
+    //     action: "getStuff",
+    //     source: "stuff"
+    // });
+
+    chrome.runtime.sendMessage({action: "getDataArray"}, function(response) {
+
+            // console.log("got a message! " + response + " source: " + response.source);
+            // var dataArray = JSON.parse(response.source);
+            // console.log(dataArray + "    " + dataArray[0]);
+        
+        if(response && response.source) {
+            
+            $("#result").html(response.source);
+            localStorage["tableValues"] = response.source;
+            fillTableVals();
+        }
     });
 
     // fillTableVals();
-    console.log("after adding listener");
     // localStorage.clear();
 
     $("#submit").click( function() {
@@ -65,6 +78,26 @@ $(document).ready( function() {
         storeGrades();
     });
 });
+
+function sourceToDataArr(source) {
+
+
+}
+
+function compareTerms(first, second) {
+
+    if(first === second)
+        return 0;
+
+    var firstYear = parseInt(first.substring(first.length()-3));
+    var secondYear = parseInt(second.substring(second.length()-3));
+
+    if (firstYear < secondYear)
+        return -1;
+    
+    return 1;
+
+}
 
 function storeGrades() {
 
