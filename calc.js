@@ -3,6 +3,24 @@ var numTables = 0;
 var tableStyle = { "border": "2px solid black", "border-collapse": "collapse", "padding": "100px" };
 var rowStyle = { "border": "1px solid black", "border-collapse": "collapse", "padding": "5px", "text-align": "left"};
 
+var dataArray = null;
+
+function actOnResponse(response) {
+
+    if(response && response.source) {
+        
+        dataArray = sourceToDataArr(JSON.parse(response.source))
+        $("#result").html(dataArray);
+        console.log(dataArray);
+        localStorage["tableValues"] = JSON.stringify(dataArray);
+        fillTableVals();
+    } else {
+        
+        setTimeout(
+            chrome.runtime.sendMessage({action: "getDataArray"}, actOnResponse), 250);
+    }
+}
+
 $(document).ready( function() {
 
     console.log("calcjs ready");
@@ -23,19 +41,7 @@ $(document).ready( function() {
     //     source: "stuff"
     // });
 
-    chrome.runtime.sendMessage({action: "getDataArray"}, function(response) {
-
-            // console.log("got a message! " + response + " source: " + response.source);
-            // var dataArray = JSON.parse(response.source);
-            // console.log(dataArray + "    " + dataArray[0]);
-        
-        if(response && response.source) {
-            
-            $("#result").html(sourceToDataArr(JSON.parse(response.source)));
-            // localStorage["tableValues"] = response.source;
-            // fillTableVals();
-        }
-    });
+    chrome.runtime.sendMessage({action: "getDataArray"}, actOnResponse);
 
     // fillTableVals();
     // localStorage.clear();
@@ -89,18 +95,29 @@ function sourceToDataArr(source) {
     terms.sort(compareTerms);
     console.log("terms: " + terms);
 
-    var dataArray = new Array(terms.length).fill([]);
-    for (var i = 0; i < source.length; i+=5) {
-        var index = terms.indexOf(source[i+2]);
-        console.log("push " + source[i+2] + " at index " + index + "    " + dataArray[index]);
-        for (j in [0,1,3,4]) {
-            dataArray[index].push(source[i+j]);
-        }
+    var dataArr = new Array(terms.length);
+    for (var i = 0; i < terms.length; i++) {
+        dataArr[i] = [];
     }
 
-    console.log("dataArray:  " + dataArray);
+    for (var i = 0; i < source.length; i+=5) {
+        var index = terms.indexOf(source[i + 2]);
+        
+        for (var j = 0; j < 5; j++) {
+            if(j === 2)
+                continue;
+            // console.log((i+j) + "  push " + source[i+j] + " at index " + index);
 
-    return dataArray;
+            dataArr[index].push(source[i+j]);
+            // if(j == 4)
+                // console.log(dataArr[index]);
+        }
+        console.log("push " + source[i+2] + " at index " + index + "   [" + dataArr[0] + "]  [" + dataArr[1] + "]   [" + dataArr[2] + "]");
+    }
+
+    console.log("dataArr:  " + dataArr);
+
+    return dataArr;
 }
 
 function compareTerms(first, second) {
@@ -274,12 +291,17 @@ function calcGPA() {
             case "D-":
                 x = 0.7;
                 break;
-            default:
+            case "F":
                 x = 0;
+                break;
+            default:
+                x = -1;
         }
         var gp = (creditList[i].value == "") ? 0 : parseInt(creditList[i].value);
-        gradePoint += (x * gp);
-        credits += gp;
+        if(x >= 0) {
+            gradePoint += (x * gp);
+            credits += gp;
+        }
     };
     console.log("total credits: " + credits + "   total grade point: " + gradePoint);
     var gpa = (gradePoint/credits).toFixed(3)
