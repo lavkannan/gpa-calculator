@@ -8,42 +8,21 @@ var dataArray = null;
 function actOnResponse(response) {
 
     if(response && response.source) {
-        
-        dataArray = sourceToDataArr(JSON.parse(response.source))
-        $("#result").html(dataArray);
-        console.log(dataArray);
+
+        // console.log("got a response")
+
+        dataArray = sourceToDataArr(response.source);
         localStorage["tableValues"] = JSON.stringify(dataArray);
-        fillTableVals();
-    } else {
-        
-        setTimeout(
-            chrome.runtime.sendMessage({action: "getDataArray"}, actOnResponse), 250);
-    }
+        // fillTableVals();
+        // return false;
+    } 
 }
 
 $(document).ready( function() {
 
-    console.log("calcjs ready");
-
-    // chrome.runtime.onMessage.addListener(function(request, sender) {
-    //   console.log("got a msg, action: " + request.action);
-    //   if (request.action === "getDataArray") {
-        
-    //     // localStorage["tableValues"] = request.source;
-    //     console.log("from popup.js:  " + (request.source));
-    //     $("#result").html(JSON.parse(request.source));
-    //     // addTables(JSON.parse(request.source));
-    //   }
-    // });
-
-    // chrome.runtime.sendMessage({
-    //     action: "getStuff",
-    //     source: "stuff"
-    // });
-
     chrome.runtime.sendMessage({action: "getDataArray"}, actOnResponse);
 
-    // fillTableVals();
+    fillTableVals();
     // localStorage.clear();
 
     $("#submit").click( function() {
@@ -93,7 +72,6 @@ function sourceToDataArr(source) {
          terms.push(source[i]);
     }
     terms.sort(compareTerms);
-    console.log("terms: " + terms);
 
     var dataArr = new Array(terms.length);
     for (var i = 0; i < terms.length; i++) {
@@ -106,16 +84,10 @@ function sourceToDataArr(source) {
         for (var j = 0; j < 5; j++) {
             if(j === 2)
                 continue;
-            // console.log((i+j) + "  push " + source[i+j] + " at index " + index);
 
             dataArr[index].push(source[i+j]);
-            // if(j == 4)
-                // console.log(dataArr[index]);
         }
-        console.log("push " + source[i+2] + " at index " + index + "   [" + dataArr[0] + "]  [" + dataArr[1] + "]   [" + dataArr[2] + "]");
     }
-
-    console.log("dataArr:  " + dataArr);
 
     return dataArr;
 }
@@ -150,7 +122,7 @@ function storeGrades() {
     });
 
     localStorage["tableValues"] = JSON.stringify(inputArray);
-    console.log(inputArray);
+    // console.log(inputArray);
     
 }
 
@@ -160,10 +132,8 @@ function fillTableVals() {
     var dataArray = [];
     if (valString == null) {
         dataArray[0] = Array(16).fill("");
-        // dataArray[1] = Array(16).fill("");
 
     } else {
-        // console.log("valString: " + valString);
         dataArray = JSON.parse(valString);
     }
 
@@ -173,17 +143,13 @@ function fillTableVals() {
 //dataArray is 2d array
 function addTables(dataArray) {
 
-    console.log(dataArray.length);
-
     for (var i = 0; i < dataArray.length; i++) {
 
         var id = numTables + i;
 
         var table = $("<table></table>").attr("id", id);
-        console.log("setting id: " + id);
+        // console.log("setting id: " + id);
         table.append("<caption><h3> Semester " + (id+1) + "</h3></caption>");
-        // table.append("<col width='130'>");
-        // table.append("<col width='130'>");
         var headingStyle = {"background-color": "#d9d9d9", "width" : "30px"};
         var headingRow = $("<tr></tr>").width(10);
         headingRow.append("<th>Course</th>").css(headingStyle);
@@ -191,13 +157,10 @@ function addTables(dataArray) {
         headingRow.append("<th>Grade</th>").css(headingStyle);
         headingRow.append("<th>Units</th>").css(headingStyle);
         headingRow.append("<th></th>").css(headingStyle);
-        // var button = $("<button>X</button>").attr("id", id).addClass("removeTable");
-        // var elem = $("<th></th>").append(button);
-        // headingRow.append(elem).css(headingStyle);
         table.append(headingRow);
         table.css(tableStyle);
 
-        console.log(dataArray); 
+        // console.log(dataArray); 
 
         addRows(dataArray[i], table, rowStyle, id)
 
@@ -217,8 +180,6 @@ function addRows(dataArray, table, style, id) {
     var count = 0;
     var widths = [100,200,50,50];
     var classNames = ["","","grade","units"];
-
-    console.log(dataArray);
 
     for (var i = 0; i < dataArray.length / numCols; i++) {
 
@@ -245,7 +206,7 @@ function addRows(dataArray, table, style, id) {
 }
 
 function calcGPA() {
-    console.log("in calcGPA")
+    // console.log("in calcGPA")
 
     var gradeList = $(".grade");
     var creditList = $(".units");
@@ -303,19 +264,10 @@ function calcGPA() {
             credits += gp;
         }
     };
-    console.log("total credits: " + credits + "   total grade point: " + gradePoint);
+    // console.log("total credits: " + credits + "   total grade point: " + gradePoint);
     var gpa = (gradePoint/credits).toFixed(3)
     $("#result").html(gpa);
 }
-
-/*
-Next step: Add new tables for diff semesters
-- separate gpa for each sem, and cumulative at the end
-- Web scraping
-
-Bugs:
-- cannot add/remove row to newly created table (must reload to add row)
-*/
 
 
 

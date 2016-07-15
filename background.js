@@ -1,31 +1,37 @@
 
-// Send message containing course history table information to popup page
-chrome.runtime.sendMessage({
-	action: "putGrades",
-	source: getRowString(document)
+var dataArray;
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+
+  	if (request.action === "putGrades") {
+	
+    	dataArray = JSON.parse(request.source);
+    	dataArray = dataArray.filter(function(x) {
+    		return x;
+    	});
+    	console.log(dataArray);
+    	// message.innerText = count + "\n" + JSON.stringify(dataArray);
+    	count++;
+	
+    	//create new tab 
+    	chrome.tabs.create({url: "calc.html"});
+
+    	return false;
+  	}
+
+  	// sent from newtab-contentscript, to get the source
+    else if(request.action === "getDataArray") {
+        sendResponse({ source: dataArray });
+    }
 });
 
-function getRowString(document_root) {
-
-	var elems = document_root.querySelectorAll(".PSEDITBOX_DISPONLY, .PSHYPERLINK");
-	// var elems = document_root.getElementById("CRSE_HIST$scroll$0").childNodes;
-
-	//not correct page
-	if(elems.length === 0) {
-		var dataArray = [];
-	    dataArray[0] = Array(16).fill("");
-		return JSON.stringify(dataArray);
-	}
-
-	var data = new Array(elems.length/2);
-	// var elems = $("document_root").find(".PSLEVEL1GRIDODDROW");
-
-	for (var i = 0; i < elems.length; i++) {
-		// str += elems[i].textContent + " ";
-		var text = elems[i].textContent;
-		if(text && data[data.length-1] !== text)
-			data.push(text);
-	}
-	return JSON.stringify(data);
-
+function waitForDataArr(){
+    if(dataArray) {
+        return JSON.stringify(dataArray);
+    
+    } else {
+        // setTimeout(waitForDataArr(), 250);
+        return "dataArray not set";
+    }
 }
+

@@ -10,7 +10,7 @@ $(document).ready( function() {
 	$("#import").click( function() {
 
 		// Inject the content script into the current page
-		chrome.tabs.executeScript(null, { file: "background.js" }, function() {
+		chrome.tabs.executeScript(null, { file: "content-script.js" }, function() {
 	    	// If you try and inject into an extensions page or the webstore/NTP you'll get an error
 		    if (chrome.runtime.lastError) {
 		      message.innerText = "There was an error injecting script : \n" + chrome.runtime.lastError.message;
@@ -19,6 +19,8 @@ $(document).ready( function() {
 	});
 
 });
+
+var count = 0;
 
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -30,10 +32,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     		return x;
     	});
     	console.log(dataArray);
-    	message.innerText = JSON.stringify(dataArray);
+    	message.innerText = count + "\n" + JSON.stringify(dataArray);
+    	count++;
 	
     	//create new tab 
     	chrome.tabs.create({url: "calc.html"});
+
+    	return false;
 
   	}
 
@@ -48,7 +53,8 @@ function waitForDataArr(){
         return JSON.stringify(dataArray);
     
     } else {
-        setTimeout(waitForDataArr(), 250);
+        // setTimeout(waitForDataArr(), 250);
+        return "dataArray not set";
     }
 }
 
