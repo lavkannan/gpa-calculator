@@ -4,8 +4,7 @@ A Chrome extension to calculate GPA.
 Future updates
 -----
 
-- Semester GPA after each table
-- New feature to automatically enter courses and grades from current page by web scraping.
+- New empty table option
 
 Installation
 -----
