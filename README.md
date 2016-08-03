@@ -4,7 +4,7 @@ A Chrome extension to calculate GPA.
 Future updates
 -----
 
-- New empty table option
+- Multiple tables option?
 
 Installation
 -----
@@ -20,10 +20,10 @@ Usage
 If you have a Cornell University student center account:
 - Log in to student center
 - Access your Course History under Academics
-- Click the extension browser icon and select "Import Grades"
+- Click the extension browser icon
 - Change any information if you need to and calculate your GPA!
 
 
 Else:
-- Click the extension browser icon and select "New GPA Calculator" 
+- Click the extension browser icon from any page 
 - Enter in courses and calculate your GPA!
