@@ -9,12 +9,15 @@ function actOnResponse(response) {
 
     if(response && response.source) {
 
-        // console.log("got a response")
+        console.log(response.source)
+        dataArray = JSON.parse(response.source);
 
-        dataArray = sourceToDataArr(response.source);
+        if(dataArray.length > 1)
+            dataArray = sourceToDataArr(dataArray);
+        console.log(dataArray);
+        imp = true;
         localStorage["tableValues"] = JSON.stringify(dataArray);
-        // fillTableVals();
-        // return false;
+        fillTableVals();
     } 
 }
 
@@ -22,7 +25,7 @@ $(document).ready( function() {
 
     chrome.runtime.sendMessage({action: "getDataArray"}, actOnResponse);
 
-    fillTableVals();
+    // fillTableVals("tableValuesNew");
     // localStorage.clear();
 
     $("#submit").click( function() {
@@ -121,7 +124,7 @@ function storeGrades() {
         inputArray[id].push($(this).val())
     });
 
-    localStorage["tableValues"] = JSON.stringify(inputArray);
+    localStorage[tableValues] = JSON.stringify(inputArray);
     // console.log(inputArray);
     
 }
@@ -129,8 +132,9 @@ function storeGrades() {
 function fillTableVals() {
 
     var valString = localStorage["tableValues"];
-    var dataArray = [];
+    var dataArray;
     if (valString == null) {
+        dataArray = [];
         dataArray[0] = Array(16).fill("");
 
     } else {

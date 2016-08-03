@@ -6,8 +6,8 @@
   "version": "1.0",
 
   "browser_action": {
-    
-    "default_popup": "popup.html",
+    "default_icon": "icon.png",
+    // "default_popup": "popup.html",
     "default_title": "Calculate your GPA!"
   },
 
@@ -18,6 +18,6 @@
   ],
 
   "background" : { 
-    "scripts": ["jquery-3.0.0.min.js","background.js"] 
+    "scripts": ["jquery-3.0.0.min.js", "background.js"] 
   }
 }

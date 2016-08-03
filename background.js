@@ -1,5 +1,12 @@
 
 var dataArray;
+console.log("background script running");
+
+chrome.browserAction.onClicked.addListener(function(tab) {
+//     // Inject the content script into the current page
+    console.log("clicked!");
+	chrome.tabs.executeScript(null, { file: "content-script.js" });
+});
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
@@ -10,28 +17,20 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     		return x;
     	});
     	console.log(dataArray);
-    	// message.innerText = count + "\n" + JSON.stringify(dataArray);
-    	count++;
 	
     	//create new tab 
-    	chrome.tabs.create({url: "calc.html"});
+    	chrome.tabs.create({url : "calc.html"});
 
-    	return false;
+    	// return false;
+
   	}
 
-  	// sent from newtab-contentscript, to get the source
+  	// sent from calc.js, to get the source
     else if(request.action === "getDataArray") {
-        sendResponse({ source: dataArray });
+    	console.log(JSON.stringify(dataArray));
+        sendResponse({ source : JSON.stringify(dataArray)});
     }
 });
 
-function waitForDataArr(){
-    if(dataArray) {
-        return JSON.stringify(dataArray);
-    
-    } else {
-        // setTimeout(waitForDataArr(), 250);
-        return "dataArray not set";
-    }
-}
+
 

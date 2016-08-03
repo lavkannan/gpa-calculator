@@ -1,14 +1,16 @@
 
+console.log("content script running");
+
 // Send message containing course history table information to popup page
 chrome.runtime.sendMessage({
 	action: "putGrades",
-	source: getRowString(document)
+	source: getRowString()
 });
 
-function getRowString(document_root) {
+function getRowString() {
 
-	var elems = document_root.querySelectorAll(".PSEDITBOX_DISPONLY, .PSHYPERLINK");
-	// var elems = document_root.getElementById("CRSE_HIST$scroll$0").childNodes;
+	var elems = document.querySelectorAll(".PSEDITBOX_DISPONLY, .PSHYPERLINK");
+	// var elems = document.getElementById("CRSE_HIST$scroll$0").childNodes;
 
 	//not correct page
 	if(elems.length === 0) {
@@ -18,7 +20,7 @@ function getRowString(document_root) {
 	}
 
 	var data = new Array(elems.length/2);
-	// var elems = $("document_root").find(".PSLEVEL1GRIDODDROW");
+	// var elems = $("document").find(".PSLEVEL1GRIDODDROW");
 
 	for (var i = 0; i < elems.length; i++) {
 		// str += elems[i].textContent + " ";
