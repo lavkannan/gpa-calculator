@@ -1,5 +1,5 @@
 # GPA Calculator
-A Chrome extension to calculate GPA.
+A Chrome extension to calculate GPA (with web scraping).
 
 Installation
 -----
