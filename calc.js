@@ -29,7 +29,12 @@ $(document).ready( function() {
     // localStorage.clear();
 
     $("#submit").click( function() {
-        calcGPA();
+        calcGPA("");
+        storeGrades();
+    });
+
+    $("#submitcs").click( function() {
+        calcGPA("CS");
         storeGrades();
     });
 
@@ -115,8 +120,9 @@ function storeGrades() {
     var inputArray = [];
     $("input").each(function() {
         var id = $(this).attr("id");
-        // console.log(id);
-        // console.log(this);
+        console.log(id);
+        console.log(this);
+        console.log($(this).val());
         if(inputArray.length <= id) {
             inputArray[id] = [];
         }
@@ -124,8 +130,8 @@ function storeGrades() {
         inputArray[id].push($(this).val())
     });
 
-    localStorage[tableValues] = JSON.stringify(inputArray);
-    // console.log(inputArray);
+    localStorage["tableValues"] = JSON.stringify(inputArray);
+    console.log(inputArray);
     
 }
 
@@ -183,7 +189,7 @@ function addRows(dataArray, table, style, id) {
     var numCols = 4;
     var count = 0;
     var widths = [100,200,50,50];
-    var classNames = ["","","grade","units"];
+    var classNames = ["course","","grade","units"];
 
     for (var i = 0; i < dataArray.length / numCols; i++) {
 
@@ -209,17 +215,24 @@ function addRows(dataArray, table, style, id) {
     }
 }
 
-function calcGPA() {
-    // console.log("in calcGPA")
+function calcGPA(dept) {
+    console.log("in calcGPA");
+    console.log("dept = " + dept);
 
+    var courseList = $(".course");
     var gradeList = $(".grade");
     var creditList = $(".units");
+
+    console.log("courseList length: " + courseList.length);
+    console.log("gradeList length: " + gradeList.length);
+    console.log("creditList length: " + creditList.length);
+
     var gradePoint = 0;
     var credits = 0;
     for (var i = 0; i < gradeList.length; i++) {
 
         var x = 0;
-        switch(gradeList[i].value.toUpperCase()) {
+        switch(gradeList[i].value.trim().toUpperCase()) {
             case "A+":
                 x = 4.3;
                 break;
@@ -263,7 +276,13 @@ function calcGPA() {
                 x = -1;
         }
         var gp = (creditList[i].value == "") ? 0 : parseInt(creditList[i].value);
-        if(x >= 0) {
+        var course = courseList[i].value;
+        var dep = course.substring(0, course.indexOf(" "));
+
+        // console.log(courseList[i].value);
+        // var dep = "";
+
+        if(x >= 0 && (dept == "" || dept == dep)) {
             gradePoint += (x * gp);
             credits += gp;
         }

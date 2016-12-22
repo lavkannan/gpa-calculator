@@ -32,5 +32,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     }
 });
 
+//TODO:
+//scrape from any html table
+//Every icon click will create new table, can add remove new grade tables 
 
 
