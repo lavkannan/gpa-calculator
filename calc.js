@@ -25,6 +25,10 @@ $(document).ready( function() {
 
     chrome.runtime.sendMessage({action: "getDataArray"}, actOnResponse);
 
+    console.log("here: " + localStorage["majorStore"]);
+    if(localStorage["majorStore"] != undefined)
+        $("#major").val(localStorage["majorStore"]);
+
     // fillTableVals("tableValuesNew");
     // localStorage.clear();
 
@@ -33,9 +37,16 @@ $(document).ready( function() {
         storeGrades();
     });
 
-    $("#submitcs").click( function() {
-        calcGPA("CS");
+    $("#submitmaj").click( function() {
+        // console.log($("#major"));
+        // console.log($("#major").val());
+        var major = $("#major").val();
+        calcGPA(major);
+        
+        console.log("there: " + major);
+        localStorage["majorStore"] = major;
         storeGrades();
+
     });
 
     $(".addRow").click( function() {
@@ -120,18 +131,18 @@ function storeGrades() {
     var inputArray = [];
     $("input").each(function() {
         var id = $(this).attr("id");
-        console.log(id);
-        console.log(this);
-        console.log($(this).val());
+        
         if(inputArray.length <= id) {
             inputArray[id] = [];
         }
-        // console.log(inputArray.length)
-        inputArray[id].push($(this).val())
+        
+        try {
+           inputArray[id].push($(this).val())
+        }
+        catch (e) { }
     });
 
     localStorage["tableValues"] = JSON.stringify(inputArray);
-    console.log(inputArray);
     
 }
 
@@ -216,16 +227,21 @@ function addRows(dataArray, table, style, id) {
 }
 
 function calcGPA(dept) {
-    console.log("in calcGPA");
-    console.log("dept = " + dept);
+    // console.log("in calcGPA");
+    // console.log("dept = " + dept);
 
     var courseList = $(".course");
     var gradeList = $(".grade");
     var creditList = $(".units");
 
-    console.log("courseList length: " + courseList.length);
-    console.log("gradeList length: " + gradeList.length);
-    console.log("creditList length: " + creditList.length);
+    // console.log("courseList length: " + courseList.length);
+    // console.log("gradeList length: " + gradeList.length);
+    // console.log("creditList length: " + creditList.length);
+
+    var arr = dept.split(",");
+    $.each(arr, function(index, item) {
+        arr[index] = item.trim().toUpperCase();
+    });
 
     var gradePoint = 0;
     var credits = 0;
@@ -282,7 +298,7 @@ function calcGPA(dept) {
         // console.log(courseList[i].value);
         // var dep = "";
 
-        if(x >= 0 && (dept == "" || dept == dep)) {
+        if(x >= 0 && (dept.trim() == "" || arr.indexOf(dep) >= 0)) {
             gradePoint += (x * gp);
             credits += gp;
         }
